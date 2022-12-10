@@ -1,48 +1,76 @@
-import ajedrez 
+import tablero_inicial
+import chess 
 import os
 import time as t
 import subprocess as s
-def partida_ajedrez(nombre_fichero):
-    tablero =[]
-    tablero_inicial = '♜\t♞\t♝\t♛\t♚\t♝\t♞\t♜\n♟\t♟\t♟\t♟\t♟\t♟\t♟\t♟\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n♙\t♙\t♙\t♙\t♙\t♙\t♙\t♙\n♖\t♘\t♗\t♕\t♔\t♗\t♘\t♖'
-    print(tablero)
-    for i in tablero_inicial.split('\n'):
-        tablero.append(i.split('\t'))
-    f = open(nombre_fichero, 'w')
-    for i in tablero:
-        f.write('\t'.join(i) + '\n')
-    f.close()
+board= chess.Board()
+print(board)
 
-    def tablero():
-        Empezar = input ("Empezar |S| si, |N| no: ")
-        if Empezar == "s":
-            bool = True
-        else:
-            print("adios")
-            t.sleep(1)
-    while True:
-        try:
-            movimientos_legales = tablero.movimientos_legales
-            jugada = input("jugada: ")
+def ClearScreen():  
 
-            movimiento =+1
-            if movimiento ==2:
-                f.write("Movimiento" + str(movimiento) + '\n')
-                movimiento = 0
-            if jugada == "movimientos_legales":
-                print("\nEstas son las jugadas legales que puedes realizar en este momento: \n {}".format(movimientos_legales))
-            if jugada == "delvolver":  # devueve la jugada al escribir delvolver
-                tablero.pop()
-            if jugada == "salir":
-                t.sleep(0,30)
-                f.close()
-                Bool = False
-            print(tablero) # imprime el tablero actual en pantalla
-        except:
-            print("\n Jugada invalida\n")
-            print("\n{}".format(tablero))
-    
-    
-partida_ajedrez('partida1.txt')  
+    movimiento_inicial = 0
+
+    Empezar = input ("Empezar |S| si, |N| no: ")
+    if Empezar == "s":
+        f = open("tablero_inicial","w")
+        juego="juego"
+        if juego():
+            input('Introduce la fila de la pieza a mover: ')
+            fila_origen = int()
+            input('Introduce la columna de la pieza a mover: ')
+            columna_origen = int()
+            input('Introduce la fila de destino: ')
+            fila_destino = int()
+            input('Introduce la columna de destino: ')
+            columna_destino = int()
+        
+            board[fila_destino-1][columna_destino-1] = board[fila_origen-1][columna_origen-1]
+            board[fila_origen-1][columna_origen-1] = '-'
             
+            movimiento += 1
+           
+            f = open("tablero_inicial", 'w')
+            
+            f.write('Movimiento' + str(movimiento) + '\n')
+    
+            for fila in board:
+                f.write('\t'.join(fila) + '\n')
+            f.close()
+        
+        else:
+                print("adios")
+                t.sleep(1)
+                while True:
+                    try:
+                        jugada = input("Jugada: ")
+                        if jugada == "exit":
+                            t.sleep(0,30)
+                            f.close()
+                        print(board)    # imprime el tablero actual en pantalla
+                        #detector de jaque mate
+                        if board.is_checkmate():
+                            print("---------\nJAQUE MATE \n --------")
+                            t.sleep(1)
+                            pregunta = input ("Quieres repetir la partida? |S| si,|N| no:")
+                            if pregunta == "s":
+                                board = chess.Board()
+                    
+                            elif pregunta == "n":
+                                print("vale hasta la proxima")
+                                t.sleep(1)
+                                f.close()
+                            else:
+                                print("opcion no valida")
+                        #si se escribe se reinicia el juego
+                        if jugada == "restart":
+                            board = chess.Board()
+                            print(board) 
+                    except:
+                        print("\nJugada invalida\n")
+                        print("\n{}".format(board))
+    
+       
 
+        
+        
+        
